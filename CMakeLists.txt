@@ -34,7 +34,7 @@ if(CBOR_CUSTOM_ALLOC)
       Please remove CBOR_CUSTOM_ALLOC from your build configuration.")
 endif()
 
-option(CBOR_PRETTY_PRINTER "Include a pretty-printing routine" ON)
+option(CBOR_PRETTY_PRINTER "Include a pretty-printing routine" OFF)
 set(CBOR_BUFFER_GROWTH
   "2"
   CACHE STRING "Factor for buffer growth & shrinking")
@@ -47,7 +47,7 @@ if(WITH_TESTS)
   add_definitions(-DWITH_TESTS)
 endif()
 
-option(WITH_EXAMPLES "Build examples" ON)
+option(WITH_EXAMPLES "Build examples" OFF)
 
 option(HUGE_FUZZ "[TEST] Fuzz through 8GB of data in the test.\
        Do not use with memory instrumentation!"  OFF)
