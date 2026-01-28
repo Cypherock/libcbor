@@ -67,7 +67,7 @@ if(PRINT_FUZZ)
   add_definitions(-DPRINT_FUZZ)
 endif()
 
-option(SANITIZE "Enable ASan & a few compatible sanitizers in Debug mode" ON)
+option(SANITIZE "Enable ASan & a few compatible sanitizers in Debug mode" OFF)
 
 set(CPACK_GENERATOR "DEB" "TGZ" "RPM")
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
@@ -130,7 +130,15 @@ else()
 
   set(CMAKE_C_FLAGS_DEBUG
     "${CMAKE_C_FLAGS_DEBUG} -O0 -Wall -Wextra -g -ggdb -DDEBUG=true")
-  set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3 -Wall -Wextra -DNDEBUG")
+
+  if("${CMAKE_BUILD_PLATFORM}" STREQUAL "Device")
+      set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3 -Wall -Wextra -DNDEBUG -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard")
+  elseif("${CMAKE_BUILD_PLATFORM}" STREQUAL "Simulator")
+      set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3 -Wall -Wextra -DNDEBUG")
+  else()
+      message(WARNING "No platform specified defaulting to Simulator. Specify using -DCMAKE_BUILD_PLATFORM=<Type> Type can be Device or Simulator")
+  endif()
+
 
   if(SANITIZE)
     set(CMAKE_C_FLAGS_DEBUG
